@@ -49,3 +49,27 @@ exports.getProduct = async (req, res, next) => {
     });
   }
 };
+
+exports.getSearchedProducts = async (req, res, next) => {
+  try {
+    const query = req.query.q;
+    const queryRegex = new RegExp(query, 'i');
+
+    const products = await Product.find({
+      $or: [{ name: queryRegex }, { team: queryRegex }],
+    });
+
+    res.status(200).json({
+      status: 'success',
+      results: products.length,
+      data: {
+        products,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
