@@ -2,18 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 
-router.route('/').get((req, res, next) => {
-  res.status(200).json({
-    status: 'success',
-    data: 'All products here',
-  });
-});
+const productController = require('../controllers/productController');
 
-router.route('/:slug').get((req, res, next) => {
-  res.status(200).json({
-    status: 'success',
-    data: 'Get a product based on its slug',
-  });
-});
+router.route('/').get(productController.getAllProducts);
+
+router.route('/:slug').get(productController.getProduct);
 
 module.exports = router;

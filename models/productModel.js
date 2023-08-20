@@ -7,6 +7,7 @@ const productSchema = mongoose.Schema({
     trim: true,
   },
   description: String,
+  slug: String,
   price: {
     type: Number,
     required: [true, 'A product must have a price'],
@@ -38,8 +39,9 @@ const productSchema = mongoose.Schema({
   },
 });
 
-productSchema.virtual('slug').get(function () {
-  return this.name.split(' ').join('').toLowerCase();
+productSchema.pre('save', function (next) {
+  this.slug = this.name.split(' ').join('').toLowerCase();
+  next();
 });
 
 const Product = mongoose.model('Product', productSchema);
