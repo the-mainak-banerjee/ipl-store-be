@@ -1,9 +1,14 @@
 const express = require('express');
 
-const productRoutes = require('./routes/productRoutes');
-
 const app = express();
 
-app.use('/api/v1/products', productRoutes);
+app.use('/', (req, res, next) => {
+  res.status(200).json({
+    status: 'success',
+    data: {
+      app: 'Ipl Store',
+    },
+  });
+});
 
 module.exports = app;
