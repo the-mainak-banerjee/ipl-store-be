@@ -39,7 +39,10 @@ exports.login = async (req, res, next) => {
   }
 
   // 2) Check if user is exist with the email and the password is matching.
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({ email })
+    .select('+password')
+    .populate('cartItems.product')
+    .populate('wishList');
   const isPasswordMatching = user
     ? await user.matchPassword(password, user.password)
     : false;
@@ -57,6 +60,14 @@ exports.login = async (req, res, next) => {
     status: 'success',
     data: {
       token,
+      foundUser: {
+        name: user.name,
+        email: user.email,
+        wishList: user.wishList,
+        cartItems: user.cartItems,
+        address: user.address,
+        _id: user.id,
+      },
     },
   });
 };

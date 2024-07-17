@@ -6,7 +6,7 @@ class ApiFeatures {
 
   filter() {
     const queryObj = { ...this.queryObject };
-    const excludedFileds = ['page', 'sort', 'limit', 'fields'];
+    const excludedFileds = ['page', 'sort', 'limit', 'fields', 'cart'];
     excludedFileds.forEach((field) => delete queryObj[field]);
 
     // Handle price filter
@@ -40,6 +40,14 @@ class ApiFeatures {
 
   limit() {
     this.query = this.query.select('-__v');
+    return this;
+  }
+
+  findByIds() {
+    if (this.queryObject.cart) {
+      const ids = this.queryObject.cart.split(',');
+      this.query = this.query.find({ _id: { $in: ids } });
+    }
     return this;
   }
 }
