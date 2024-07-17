@@ -6,8 +6,8 @@ exports.getAllProducts = async (req, res, next) => {
     const features = new ApiFeatures(Product.find(), req.query)
       .filter()
       .sort()
-      .paginate()
-      .limit();
+      .limit()
+      .findByIds();
 
     const products = await features.query;
 
@@ -28,8 +28,8 @@ exports.getAllProducts = async (req, res, next) => {
 
 exports.getProduct = async (req, res, next) => {
   try {
-    const { slug } = req.params;
-    const product = await Product.findOne({ slug });
+    const { id } = req.params;
+    const product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({
         status: 'fail',
